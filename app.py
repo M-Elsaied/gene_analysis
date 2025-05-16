@@ -18,7 +18,7 @@ st.set_page_config(layout="wide")
 st.title("🧬 Consistent Gene Signature Analysis from Drug Treatment")
 st.markdown("""
 Upload **multiple CSV files**, each corresponding to **one cell line** treated with the **same drug**. 
-Ensure each file contains `ID_geneid`, `Name_GeneSymbol`, and `Value_LogDiffExp` columns.
+Ensure each file contains `ID_geneid`, `Name_GeneSymbol`, `Value_LogDiffExp`, and `Significance_pvalue` columns.
 
 🔹 Each file name should follow this format: `DrugName cell_line_name.xls - DrugName cell_line_name.xls.csv`  
 🔹 One drug at a time only.
@@ -27,6 +27,7 @@ Ensure each file contains `ID_geneid`, `Name_GeneSymbol`, and `Value_LogDiffExp`
 # --- USER INPUT ---
 log2fc_threshold = st.sidebar.slider("log₂ Fold Change Threshold", min_value=0.5, max_value=3.0, value=2.0, step=0.1)
 consistency_threshold = st.sidebar.slider("Cell Line Consistency Threshold (%)", min_value=50, max_value=100, value=70, step=5)
+pvalue_threshold = st.sidebar.slider("Significance P-Value Threshold", min_value=0.0, max_value=1.0, value=0.05, step=0.01)
 
 uploaded_files = st.file_uploader("Upload CSVs for one drug across different cell lines:", type="csv", accept_multiple_files=True)
 
@@ -43,6 +44,8 @@ if uploaded_files:
             if " - " in file.name:
                 cell_line = file.name.split(" - ")[0].replace("Camptothecin", "").replace(".xls", "").strip()
                 df = pd.read_csv(file_path)
+                # Filter by p-value threshold before storing
+                df = df[df['Significance_pvalue'] <= pvalue_threshold]
                 cell_line_data[cell_line] = df
 
         st.success(f"Loaded {len(cell_line_data)} cell lines:")
