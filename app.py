@@ -25,9 +25,9 @@ Ensure each file contains `ID_geneid`, `Name_GeneSymbol`, `Value_LogDiffExp`, an
 """)
 
 # --- USER INPUT ---
-log2fc_threshold = st.sidebar.slider("log₂ Fold Change Threshold", min_value=0.5, max_value=3.0, value=2.0, step=0.1)
-consistency_threshold = st.sidebar.slider("Cell Line Consistency Threshold (%)", min_value=50, max_value=100, value=70, step=5)
-pvalue_threshold = st.sidebar.slider("Significance P-Value Threshold", min_value=0.0, max_value=1.0, value=0.05, step=0.01)
+log2fc_threshold = st.sidebar.slider("log₂ Fold Change Threshold", min_value=0.5, max_value=3.0, value=1.0, step=0.1)
+consistency_threshold = st.sidebar.slider("Cell Line Consistency Threshold (%)", min_value=30, max_value=100, value=50, step=10)
+pvalue_threshold = st.sidebar.slider("Significance P-Value Threshold", min_value=0.0, max_value=0.2, value=0.2, step=0.01)
 
 uploaded_files = st.file_uploader("Upload CSVs for one drug across different cell lines:", type="csv", accept_multiple_files=True)
 
